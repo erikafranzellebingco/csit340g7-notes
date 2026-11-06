@@ -20,6 +20,27 @@ function Notes() {
     body: ""
   });
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    const trimmedTitle = form.title.trim();
+    const trimmedBody = form.body.trim();
+    if (trimmedTitle === '' || trimmedBody === '') {
+      return;
+    }
+    setNotes((prevNotes) => [
+      ...prevNotes,
+      {
+        id: crypto.randomUUID(),
+        title: trimmedTitle,
+        body: trimmedBody
+      }
+    ]);
+    setForm({
+      title: "",
+      body: ""
+    });
+  }
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -42,7 +63,7 @@ function Notes() {
                 />
             </div>
 
-            <form className="grid gap-3">
+            <form className="grid gap-3" onSubmit={handleSubmit}>
                 <p className="text-[13px] font-normal tracking-wide text-[#949494]">NEW NOTE</p>
                 <input
                     name="title"
