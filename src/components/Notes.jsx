@@ -19,7 +19,10 @@ function Notes() {
       const saved = localStorage.getItem('notes')
       return saved ? JSON.parse(saved) : startingNotes
     })
-    const [form, setForm] = useState({ title: '', body: '' })
+    const [form, setForm] = useState(() => {
+      const saved = localStorage.getItem('draft')
+      return saved ? JSON.parse(saved) : { title: '', body: '' }
+    })
     const [searchTerm, setSearchTerm] = useState('')
     const titleRef = useRef(null)
     
@@ -35,18 +38,18 @@ function Notes() {
     }, [form])
 
     function handleChange(event) {
-    const { name, value } = event.target
-    setForm({ ...form, [name]: value })
+      const { name, value } = event.target
+      setForm({ ...form, [name]: value })
     }
  
     function handleSubmit(event) {
     event.preventDefault()
- 
+
     const title = form.title.trim()
     const body = form.body.trim()
- 
+
     if (title === '' || body === '') return
- 
+
     setNotes([...notes, { id: crypto.randomUUID(), title, body }])
       setForm({ title: '', body: '' })
       titleRef.current.focus()
